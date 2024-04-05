@@ -7,6 +7,7 @@ const generateToken = require("../middlewares/generateToken");
 const expressAsyncHandler = require("express-async-handler");
 const cloudinary = require("cloudinary").v2;
 const nodemailer = require("nodemailer");
+const otpGenerator = require("../middlewares/otpGenerate");
 
 // cloudinary config
 require("../utils/cloudinaryConfig");
@@ -14,7 +15,7 @@ require("../utils/cloudinaryConfig");
 const register = asyncHandler(async (req, res) => {
   // console.log("\n Register Req is : ", req);
 
-  const { username, email, password, usertype, location ,mobile} = req.body;
+  const { username, email, password, usertype, location, mobile } = req.body;
 
   try {
     if (!username || !email || !password || !usertype || !location || !mobile) {
@@ -55,7 +56,7 @@ const register = asyncHandler(async (req, res) => {
       email,
       password: psw,
       location,
-     mobile,
+      mobile,
       userType: usertype,
       picture: {
         url: image?.secure_url,
@@ -122,7 +123,7 @@ const updation = asyncHandler(async (req, res) => {
   const { email } = req.body || req?.user;
   const { picture } = req.body || req?.user;
   const { userType } = req.body || req?.user;
-  const {location} = req.body || req?.user ;
+  const { location } = req.body || req?.user;
 
   try {
     const filter = { _id: req.user?._id };
@@ -133,7 +134,7 @@ const updation = asyncHandler(async (req, res) => {
         username: username,
         email: email,
         picture: picture,
-        location:location,
+        location: location,
         userType: userType,
       },
       $currentDate: { lastModified: true },
@@ -147,7 +148,6 @@ const updation = asyncHandler(async (req, res) => {
     const result = await User.findOneAndUpdate(filter, update, options);
 
     console.log(result);
-   
 
     console.log("\nUpdated : ", result.value);
     responseHandler(res, result.value);
@@ -157,26 +157,120 @@ const updation = asyncHandler(async (req, res) => {
   }
 });
 
-const forgotPassword = expressAsyncHandler(async (req, res) => {
-  const { email ,password} = req.body;
+const sendmail = expressAsyncHandler(async (req, res) => {
+  const { email } = req.body;
 
-  if (!email || !password) {
-    errorHandler(res, 404, "Please Enter All Detials.");
+  console.log(req.body);
+
+  if (!email) {
+    errorHandler(res, 404, "Please Enter Email.");
     return;
   }
 
-  try {
-     
+  const forgot = await User.findOne({ email: email });
 
-    const forgot = await User.findOne({email:email});
+  if (!forgot) {
+    errorHandler(res, 404, "User doesn't Exist.");
+    return;
+  }
 
-    if(!forgot){
-      errorHandler(res,404,"User doesn't Exist.");
-      return ;
+  const name = forgot?.username;
+
+  const OTP = otpGenerator();
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // Use `true` for port 465, `false` for all other ports
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.KEY,
+    },
+  });
+
+  const mailOptions = {
+    from: {
+      name: "Help Community",
+      address: "help@gmail.com",
+    }, // sender address
+    to: email, // list of receivers
+    subject: "Forgot Password", // Subject line
+    text: "Reset Password ", // plain text body
+    html: `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>OTP Email</title>
+        <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          margin: 0;
+          padding: 20px;
+      }
+      .container {
+          max-width: 600px;
+          margin: auto;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 20px;
+      }
+      h1 {
+          color: #333;
+      }
+      p {
+          color: #666;
+      }
+      .otp {
+          font-size: 24px;
+          font-weight: bold;
+          color: #007bff;
+          margin-top: 10px;
+      }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>One-Time Password (OTP) Email</h1>
+            <h3 style="display : inline-block;">Hey ${name},</h3> <br/>
+            <p>Your One-Time Password (OTP) for accessing our service is:</p>
+            <div class="otp">${OTP}</div>
+            <p>This OTP is valid for a limited time. Please do not share it with anyone.</p>
+            <p>If you didn't request this OTP, please ignore this email.</p>
+        </div>
+    </body>
+    </html>
+  `, // html body
+    // attachments : [
+    //   {
+    //   filename : 'cuet.pdf',
+    //   path : path.join(__dirname,'cuet.pdf'),
+    //   contentType : 'application/pdf'
+    // }]
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      errorHandler(res, 404, "Email not Send.");
+      return;
+    } else {
+      responseHandler(res, OTP);
+      console.log("Email sent:", info.response);
     }
+  });
+});
 
+const changePsw = expressAsyncHandler(async (req, res) => {
+  const { password, email } = req.body;
 
-
+  if (!password) {
+    errorHandler(res, 404, "Please Enter a new Password.");
+    return;
+  }
+  try {
     const psw = await bcrypt.hashSync(password, 12);
 
     if (!psw) {
@@ -184,26 +278,23 @@ const forgotPassword = expressAsyncHandler(async (req, res) => {
       return;
     }
 
-
-    const user = await User.findOneAndUpdate({email:email},{
-      $set:{
-        password:psw
+    const user = await User.findOneAndUpdate(
+      { email: email },
+      {
+        $set: {
+          password: psw,
+        },
+      },
+      {
+        returnOriginal: false,
       }
-    },{
-      returnOriginal:false
-    });
+    );
 
     user.password = undefined;
-    responseHandler(res,user);
-
-    
- 
-
-    
+    responseHandler(res, user);
   } catch (error) {
     errorHandler(res, 500, "Internal Error in Forgot Password API");
     return;
   }
 });
-
-module.exports = { register, login, updation, forgotPassword };
+module.exports = { register, login, updation, sendmail, changePsw };

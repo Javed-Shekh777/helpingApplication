@@ -1,4 +1,4 @@
-const { register,login,updation, forgotPassword } = require("../controllers/userController");
+const { register,login,updation, changePsw,sendmail } = require("../controllers/userController");
 const protect = require("../middlewares/verifyToken");
 const express= require('express');
 const upload = require("../middlewares/multerConfig");
@@ -10,7 +10,9 @@ const router = express.Router();
 router.route('/register').post(upload.single("image"),register);
 router.route('/login').post(login);
 router.route('/update').post(protect,updation);
-router.route('/email').all(forgotPassword);
+router.route('/sendemail').all(sendmail);
+router.route('/changepsw').post(changePsw)
+
 
 
 
