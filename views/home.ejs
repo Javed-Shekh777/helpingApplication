@@ -51,7 +51,7 @@
     <h1>Welcome To The Admin Panel</h1>
     <div class="w-25% form">
 
-        <form action="http://localhost:5000/api/help/user" method="get" onsubmit="admin()" >
+        <form action="https://helpingapplication.onrender.com/api/help/user" method="get" onsubmit="admin()" >
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
                 <label for="floatingInput">Email address</label>
@@ -70,7 +70,7 @@
     <script>
         async function admin() {
 
-            var url = "http://localhost:5000/api/help/user";
+            var url = "https://helpingapplication.onrender.com/api/help/user";
 
             var email = document.getElementById("floatingInput").value;
             var password = document.getElementById("floatingPassword").value;
