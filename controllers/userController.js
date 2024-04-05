@@ -13,7 +13,7 @@ const otpGenerator = require("../middlewares/otpGenerate");
 require("../utils/cloudinaryConfig");
 
 const register = asyncHandler(async (req, res) => {
-  // console.log("\n Register Req is : ", req);
+ 
 
   const { username, email, password, usertype, location, mobile } = req.body;
 
@@ -67,7 +67,7 @@ const register = asyncHandler(async (req, res) => {
     data.password = undefined;
     responseHandler(res, data);
   } catch (error) {
-    console.log(`Error of Register : ${error.message}`);
+    
     errorHandler(res, 500, "Internal error in Register API");
   }
 });
@@ -75,7 +75,7 @@ const register = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  console.log("\n\n Login API : ", req.body);
+  
 
   try {
     if (!email || !password) {
@@ -99,7 +99,7 @@ const login = asyncHandler(async (req, res, next) => {
 
     const token = await generateToken(userAuth._id);
 
-    console.log("token : ", token);
+    
 
     if (token.message) {
       errorHandler(res, 404, token?.message);
@@ -109,7 +109,7 @@ const login = asyncHandler(async (req, res, next) => {
       responseHandler(res, { token, userAuth });
     }
   } catch (error) {
-    console.log(`Error of Register : ${error.message}`);
+     
     errorHandler(res, 500, "Internal error in Login API");
   }
 });
@@ -147,9 +147,7 @@ const updation = asyncHandler(async (req, res) => {
 
     const result = await User.findOneAndUpdate(filter, update, options);
 
-    console.log(result);
-
-    console.log("\nUpdated : ", result.value);
+    
     responseHandler(res, result.value);
     // }
   } catch (error) {
@@ -160,7 +158,7 @@ const updation = asyncHandler(async (req, res) => {
 const sendmail = expressAsyncHandler(async (req, res) => {
   const { email } = req.body;
 
-  console.log(req.body);
+  
 
   if (!email) {
     errorHandler(res, 404, "Please Enter Email.");
@@ -258,7 +256,7 @@ const sendmail = expressAsyncHandler(async (req, res) => {
       return;
     } else {
       responseHandler(res, OTP);
-      console.log("Email sent:", info.response);
+       return ;
     }
   });
 });

@@ -8,7 +8,7 @@ const Inventory = require("../models/InventoryModel");
 const admin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  console.log(req.body);
+  
 
   // if (
   //   password == process.env.ADMIN_PASSWORD &&
@@ -26,7 +26,7 @@ const send = expressAsyncHandler(async (req, res) => {
 const findAllUser = expressAsyncHandler(async (req, res) => {
   try {
     const user = await User.find();
-    console.log(user);
+    
 
     res.status(200).json({ status: true, user });
   } catch (error) {
@@ -37,7 +37,7 @@ const findAllUser = expressAsyncHandler(async (req, res) => {
 const findAllItems = expressAsyncHandler(async (req, res) => {
   try {
     const items = await Inventory.find();
-    console.log(items);
+     
 
     res.status(200).json({ status: true, items });
   } catch (error) {

@@ -89,18 +89,9 @@
         </div>
     </nav>
 
-    <!-- <nav class="navbar text-white d-flex" style="justify-content:space-around;height:100px;background:#64e15b; margin-bottom:50px;">
-        <div class="container-fluid justify-space-around;">
-            <h1>Welcome to ADMIN PANEL</h1>
-        <div class="d-flex g-5">
-            <button class="btn btn-outline-success bg-primary  text-white" style="background: blue;color:#fff" id="btn1">UserData</button>
-            <button class="btn btn-outline-success btn2"  id="btn2"
-                style="background: rgb(6, 246, 30);color:#fff;border:2px solid black;color:black;">Inventory Data</button>
-
-        </div>
-        </div>
+    
         
-    </nav> -->
+ 
 
 
     <table class="table table-bordered border-primary">
@@ -117,57 +108,17 @@
             </tr>
         </thead>
         <tbody class="table-group-divider text-center" id="utable">
-            <!-- <tr>
-                <td scope="row" style="color: red;">2432432433534534</td>
-                <td>JAved</td>
-                <td>Javed@gmail.com</td>
-                <td>6307354106</td>
-                <td style="flex-wrap: wrap;">Javed@123</td>
-                <td style="flex-wrap: wrap;">Vill. Government Polytechnic College Aadampur Tarabganj Gonda</td>
-                <td>Donor</td>
-                <td><img src="" height="80px" width="80px" style="border-radius: 50%;object-fit:cover;margin:20px"
-                        alt=""></td>
-            </tr> -->
+             
 
 
         </tbody>
     </table>
 
 
-    <!-- <table border="1">
-        <thead>
-            <tr style="text-align: center;">
-                <th>Id</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Mobile</th>
-                <th style="flex-wrap: wrap;width:100px;">Password</th>
-                <th style="flex-wrap: wrap;display:flex">Location</th>
-                <th>UserType</th>
-                <th>Image</th>
-            </tr>
-        </thead>
-        <tbody style="text-align: center;" id="utable"> -->
+    
 
 
-    <!-- <tr> -->
-    <!-- <td style="color: red;">2432432433534534</td>
-                <td>JAved</td>
-                <td>Javed@gmail.com</td>
-                <td>6307354106</td>
-                <td style="flex-wrap: wrap;width:50px">Javed@123</td>
-                <td style="flex-wrap: wrap;">Vill. Government Polytechnic College Aadampur Tarabganj Gonda</td>
-                <td>Donor</td>
-                <td><img src="../uploads/image-1712141483044.JPG" height="80px" width="80px"
-                        style="border-radius: 50%;object-fit:cover;margin:20px" alt=""></td>
-            </tr>
-
-
-
-
-
-        </tbody>
-    </table> -->
+    
 
 
 
@@ -187,14 +138,14 @@
                 }
             );
 
-            console.log("'HF FS", response);
+           
 
             if (!response) {
                 alert('Network response was not ok');
             }
             userData = await response.json();
             userData = userData?.user;
-            console.log(userData);
+             
         }
 
 
@@ -213,7 +164,7 @@
             document.querySelector("#head").appendChild(row);
             document.querySelector("#utable").innerHTML = "";
             userData.map((user) => {
-                console.log(user?.picture?.url)
+               
                 var newRow = document.createElement("tr");
                 newRow.innerHTML = `<td  scope='row'  style='color: red;'>${user._id}</td>` +
                     `<td>${user.username}</td>` +
@@ -245,15 +196,14 @@
                 }
             );
 
-            console.log("'HF FS", response);
-
+             
             if (!response) {
                 alert('Network response was not ok');
             }
 
             userItem = await response.json();
             userItem = userItem?.items;
-            console.log("\nItms : ", userItem);
+            
 
 
             ///////////////////////

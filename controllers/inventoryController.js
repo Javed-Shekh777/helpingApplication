@@ -9,14 +9,14 @@ const cloudinary = require("cloudinary").v2;
 require("../utils/cloudinaryConfig");
 
 const addItem = expressAsyncHandler(async (req, res) => {
-  console.log("Add ITtem : ", req.body);
+ 
 
   if (!req.user._id) {
     errorHandler(res, 404, "You are not a valid User.");
     return;
   }
 
-  console.log("File is : ", req.file);
+ 
 
   const {
     itemName,
@@ -42,7 +42,7 @@ const addItem = expressAsyncHandler(async (req, res) => {
       folder: "helpItem",
     });
 
-    console.log("\n\n Item Image is : ", image);
+    
 
     if (!image) {
       errorHandler(res, 404, "Image not Uploaded!!");
@@ -71,7 +71,7 @@ const addItem = expressAsyncHandler(async (req, res) => {
     }
     responseHandler(res, item);
   } catch (error) {
-    console.log(`Error In AddItem : ${error.message}`);
+    
     errorHandler(res, 500, "Error in AddItem API");
     return;
   }
@@ -176,7 +176,7 @@ const fetchItem = expressAsyncHandler(async (req, res) => {
 });
 
 const editItem = expressAsyncHandler(async (req, res) => {
-  console.log("\n\n Edit Item API : ", req.body);
+  
 
   if (!req.user._id) {
     errorHandler(res, 404, "You are not a valid User.");

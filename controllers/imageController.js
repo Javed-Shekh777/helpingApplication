@@ -21,7 +21,7 @@ const updateImage = expressAsyncHandler(async (req, res) => {
   }
 
   const itemId = req.query.id || "";
-  console.log("Image : ", req.file);
+ 
 
   try {
     if (itemId) {
@@ -35,7 +35,7 @@ const updateImage = expressAsyncHandler(async (req, res) => {
         imageData?.itemImage?.publicId
       );
 
-      console.log("deltes : ", del);
+      
 
       if (del && image) {
         const data = await Inventory.findByIdAndUpdate(
