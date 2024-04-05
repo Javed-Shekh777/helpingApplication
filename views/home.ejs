@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <title>ADMIN PANEL </title>
+
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            background: linear-gradient(360deg, #01a99c 10%, #0698b1 360%); 
+            justify-content: center;
+            flex-direction: column;
+        }
+        h1{
+            margin: 50px auto;
+        }
+        .form{
+            border: 2px solid;
+            height: 300px;
+            width: 400px;
+            border-radius: 20px;
+            padding: 20px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(360deg, #b6eae1 10%, #D2FBAD 360%);
+            box-shadow:  0 0 5px black,0 0 10px black ,0 0 25px black;
+        }
+        .form form{
+            width: 100%;
+
+             
+            display: flex;
+            flex-direction: column;
+        }
+        button{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Welcome To The Admin Panel</h1>
+    <div class="w-25% form">
+
+        <form action="http://localhost:5000/api/help/user" method="get" onsubmit="admin()" >
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">Email address</label>
+              </div>
+              <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Password</label>
+              </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    
+
+
+    <script>
+        async function admin() {
+
+            var url = "http://localhost:5000/api/help/user";
+
+            var email = document.getElementById("floatingInput").value;
+            var password = document.getElementById("floatingPassword").value;
+
+
+
+
+            console.log("jfnfaksda");
+
+            const res = await fetch(
+                url, {
+                method: 'get',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email ,password})
+            });
+
+            console.log(res);
+
+        }
+    </script>
+</body>
+
+</html>

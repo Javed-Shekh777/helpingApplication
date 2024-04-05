@@ -1,0 +1,306 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+
+        }
+
+        h1 {
+            color: #000;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 6px 15px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+
+        table {
+
+            width: 95vw;
+            border-collapse: collapse;
+            border: 2px solid black;
+            padding: 20px;
+            justify-content: center;
+
+            align-items: center;
+            align-self: center;
+            margin: 0 20px;
+        }
+
+        th {
+            text-align: center;
+            padding: 5px 10px;
+
+        }
+
+        td {
+            text-align: center;
+        }
+
+        th:nth-child(1),
+        th:nth-child(3),
+        th:nth-child(5),
+        th:nth-child(7) {
+            background-color: aqua;
+        }
+
+        th:nth-child(0),
+        th:nth-child(2),
+        th:nth-child(4),
+        th:nth-child(6) {
+            background-color: mediumorchid;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body onload="getData()">
+
+
+    <nav class="navbar text-white d-flex ">
+        <div class="container-fluid  " style="justify-content: space-between;">
+            <a class="navbar-brand">Welcome to ADMIN PANEL</a>
+            <div class="d-flex gap-5" role="search">
+                <button class="btn btn-outline-success bg-primary  text-white" id="btn1">User Data</button>
+                <button class="btn btn-outline-success btn2" id="btn2">Inventpry Data</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- <nav class="navbar text-white d-flex" style="justify-content:space-around;height:100px;background:#64e15b; margin-bottom:50px;">
+        <div class="container-fluid justify-space-around;">
+            <h1>Welcome to ADMIN PANEL</h1>
+        <div class="d-flex g-5">
+            <button class="btn btn-outline-success bg-primary  text-white" style="background: blue;color:#fff" id="btn1">UserData</button>
+            <button class="btn btn-outline-success btn2"  id="btn2"
+                style="background: rgb(6, 246, 30);color:#fff;border:2px solid black;color:black;">Inventory Data</button>
+
+        </div>
+        </div>
+        
+    </nav> -->
+
+
+    <table class="table table-bordered border-primary">
+        <thead id="head">
+            <tr style="text-align: center;">
+                <th scope="col">Id</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Mobile</th>
+                <th scope="col">Password</th>
+                <th scope="col">Location</th>
+                <th scope="col">UserType</th>
+                <th scope="col">Image</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider text-center" id="utable">
+            <!-- <tr>
+                <td scope="row" style="color: red;">2432432433534534</td>
+                <td>JAved</td>
+                <td>Javed@gmail.com</td>
+                <td>6307354106</td>
+                <td style="flex-wrap: wrap;">Javed@123</td>
+                <td style="flex-wrap: wrap;">Vill. Government Polytechnic College Aadampur Tarabganj Gonda</td>
+                <td>Donor</td>
+                <td><img src="" height="80px" width="80px" style="border-radius: 50%;object-fit:cover;margin:20px"
+                        alt=""></td>
+            </tr> -->
+
+
+        </tbody>
+    </table>
+
+
+    <!-- <table border="1">
+        <thead>
+            <tr style="text-align: center;">
+                <th>Id</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th style="flex-wrap: wrap;width:100px;">Password</th>
+                <th style="flex-wrap: wrap;display:flex">Location</th>
+                <th>UserType</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center;" id="utable"> -->
+
+
+    <!-- <tr> -->
+    <!-- <td style="color: red;">2432432433534534</td>
+                <td>JAved</td>
+                <td>Javed@gmail.com</td>
+                <td>6307354106</td>
+                <td style="flex-wrap: wrap;width:50px">Javed@123</td>
+                <td style="flex-wrap: wrap;">Vill. Government Polytechnic College Aadampur Tarabganj Gonda</td>
+                <td>Donor</td>
+                <td><img src="../uploads/image-1712141483044.JPG" height="80px" width="80px"
+                        style="border-radius: 50%;object-fit:cover;margin:20px" alt=""></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table> -->
+
+
+
+
+    <script>
+
+
+        var userData;
+        var userItem;
+
+        async function getData() {
+            response = await fetch(
+                'http://localhost:5000/api/help/user/findalluser',
+                {
+                    method: 'get',
+
+                }
+            );
+
+            console.log("'HF FS", response);
+
+            if (!response) {
+                alert('Network response was not ok');
+            }
+            userData = await response.json();
+            userData = userData?.user;
+            console.log(userData);
+        }
+
+
+        document.querySelector("#btn1").addEventListener("click", async function () {
+            // Create a new row
+            var row = document.createElement("tr");
+            row.innerHTML = `<th  scope='row'  style='color: red;'>userId</th>` +
+                `<th>Userame</th>` +
+                `<th>Email</th>` +
+                `<th>Mobile</th>` +
+                `<th>Password</th>` +
+                `<th style='flex-wrap: wrap;'>Location</th>` +
+                `<th>UserType</th>` +
+                `<th>Image</th>`;
+            document.querySelector("#head").innerHTML = "";
+            document.querySelector("#head").appendChild(row);
+            document.querySelector("#utable").innerHTML = "";
+            userData.map((user) => {
+                console.log(user?.picture?.url)
+                var newRow = document.createElement("tr");
+                newRow.innerHTML = `<td  scope='row'  style='color: red;'>${user._id}</td>` +
+                    `<td>${user.username}</td>` +
+                    `<td>${user.email}</td>` +
+                    `<td>${user.mobile}</td>` +
+                    `<td>${user.password}</td>` +
+                    `<td>${user.location}</td>` +
+                    `<td>${user.userType}</td>` +
+                    `<td><img src=${user?.picture?.url} height='80px' width='80px' style='border-radius: 50%;object-fit:cover;'  alt='' /></td>`;
+
+                // Append the new row to the table body
+
+
+
+                return document.querySelector("#utable").appendChild(newRow);
+            })
+
+        });
+
+
+        document.querySelector("#btn2").addEventListener("click", async function () {
+            // Create a new row
+
+            response = await fetch(
+                'http://localhost:5000/api/help/user/findallitems',
+                {
+                    method: 'get',
+
+                }
+            );
+
+            console.log("'HF FS", response);
+
+            if (!response) {
+                alert('Network response was not ok');
+            }
+
+            userItem = await response.json();
+            userItem = userItem?.items;
+            console.log("\nItms : ", userItem);
+
+
+            ///////////////////////
+            var row = document.createElement("tr");
+            row.innerHTML = `<th  scope='row'  style='color: red;'>UserId</th>` +
+                `<th>ItemName</th>` +
+                `<th>Category</th>` +
+                `<th>Quantity</th>` +
+                `<th> Expiray Date</th>` +
+                `<th style='flex-wrap: wrap;'>Description </th>` +
+                `<th>Image</th>`;
+                document.querySelector("#head").innerHTML = "";
+                document.querySelector("#head").appendChild(row);
+                document.querySelector("#utable").innerHTML = "";
+
+
+
+
+            ////////////////////
+            userItem.map((item) => {
+
+                var newRow = document.createElement("tr");
+                newRow.innerHTML = `<td  scope='row'  style='color: red;'>${item?.userId}</td>` +
+                    `<td>${item?.itemName}</td>` +
+                    `<td>${item?.category}</td>` +
+                    `<td>${item?.quantity}</td>` +
+                    `<td>${item?.expirationDate}</td>` +
+                    `<td style='flex-wrap: wrap;'>${item?.description}</td>` +
+                    `<td><img src=${item?.itemImage?.url} height='80px' width='80px' style='border-radius: 50%;object-fit:cover;margin:20px'  alt='' /></td>`;
+
+                // Append the new row to the table body
+                return document.querySelector("#utable").appendChild(newRow);
+
+
+            });
+
+
+
+
+
+        });
+
+
+
+
+
+    </script>
+</body>
+
+</html>
