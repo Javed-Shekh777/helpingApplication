@@ -8,13 +8,12 @@ const expressAsyncHandler = require("express-async-handler");
 const cloudinary = require("cloudinary").v2;
 const nodemailer = require("nodemailer");
 const otpGenerator = require("../middlewares/otpGenerate");
+const Inventory = require("../models/InventoryModel");
 
 // cloudinary config
 require("../utils/cloudinaryConfig");
 
 const register = asyncHandler(async (req, res) => {
- 
-
   const { username, email, password, usertype, location, mobile } = req.body;
 
   try {
@@ -67,15 +66,12 @@ const register = asyncHandler(async (req, res) => {
     data.password = undefined;
     responseHandler(res, data);
   } catch (error) {
-    
     errorHandler(res, 500, "Internal error in Register API");
   }
 });
 
 const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-
-  
 
   try {
     if (!email || !password) {
@@ -99,8 +95,6 @@ const login = asyncHandler(async (req, res, next) => {
 
     const token = await generateToken(userAuth._id);
 
-    
-
     if (token.message) {
       errorHandler(res, 404, token?.message);
       return;
@@ -109,7 +103,6 @@ const login = asyncHandler(async (req, res, next) => {
       responseHandler(res, { token, userAuth });
     }
   } catch (error) {
-     
     errorHandler(res, 500, "Internal error in Login API");
   }
 });
@@ -147,7 +140,6 @@ const updation = asyncHandler(async (req, res) => {
 
     const result = await User.findOneAndUpdate(filter, update, options);
 
-    
     responseHandler(res, result.value);
     // }
   } catch (error) {
@@ -157,8 +149,6 @@ const updation = asyncHandler(async (req, res) => {
 
 const sendmail = expressAsyncHandler(async (req, res) => {
   const { email } = req.body;
-
-  
 
   if (!email) {
     errorHandler(res, 404, "Please Enter Email.");
@@ -256,7 +246,7 @@ const sendmail = expressAsyncHandler(async (req, res) => {
       return;
     } else {
       responseHandler(res, OTP);
-       return ;
+      return;
     }
   });
 });
@@ -295,4 +285,40 @@ const changePsw = expressAsyncHandler(async (req, res) => {
     return;
   }
 });
-module.exports = { register, login, updation, sendmail, changePsw };
+
+const deleteAccount = expressAsyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    errorHandler(res, 404, "Please give me full information about your.");
+    return;
+  }
+
+  try {
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      errorHandler(res, 404, "User Doesn't Exist.");
+      return;
+    }
+
+    const items = await Inventory.deleteMany({ userId: user?._id });
+    const users = await User.findOneAndDelete({ email: email });
+
+    if (items && users) {
+      responseHandler(res, "Account Deleted Successfully.");
+      return;
+    }
+  } catch (error) {
+    errorHandler(res, 404, "Internal Error in Delete Account API");
+    return;
+  }
+});
+module.exports = {
+  register,
+  login,
+  updation,
+  sendmail,
+  changePsw,
+  deleteAccount,
+};
