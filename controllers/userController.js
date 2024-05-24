@@ -172,8 +172,8 @@ const sendmail = expressAsyncHandler(async (req, res) => {
     port: 587,
     secure: false, // Use `true` for port 465, `false` for all other ports
     auth: {
-      user: process.env.EMAIL,
-      pass: process.env.KEY,
+      user: process.env.AUTH_EMAIL,
+      pass: process.env.AUTH_EKEY,
     },
   });
 
